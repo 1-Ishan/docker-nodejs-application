@@ -11,8 +11,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 sh 'ls -ltra'
-                git url: "${REPO_URL}"
-            }
+                }
         }
         
         stage('Build Docker Image') {
