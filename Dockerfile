@@ -3,6 +3,7 @@ FROM node:22-alpine AS builder
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install
+RUN npm run build 
 COPY . .
 
 FROM nginx:alpine
