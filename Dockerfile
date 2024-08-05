@@ -1,9 +1,16 @@
-FROM node:14-alpine
+FROM node:14-alpine AS builder
+
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install 
+RUN npm install
 COPY . .
-EXPOSE 3001
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+
+FROM nginx:alpine
+
+COPY --from=builder /usr/src/app /usr/src/app
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+WORKDIR /usr/src/app
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
