@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                sh 'ls -ltra'
                 git url: "${REPO_URL}"
             }
         }
