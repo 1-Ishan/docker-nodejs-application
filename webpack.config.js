@@ -1,23 +1,26 @@
-const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
-    // your existing webpack configuration
-    resolve: {
-        fallback: {
-            "http": require.resolve("stream-http"),
-            "zlib": require.resolve("browserify-zlib"),
-            "querystring": require.resolve("querystring-es3"),
-            "path": require.resolve("path-browserify"),
-            "crypto": require.resolve("crypto-browserify"),
-            "fs": false,
-            "stream": require.resolve("stream-browserify"),
-            "net": false,
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         }
-    },
-    plugins: [
-        new webpack.ProvidePlugin({
-            process: 'process/browser',
-            Buffer: ['buffer', 'Buffer'],
-        }),
+      }
     ]
+  },
+  resolve: {
+    extensions: ['.js']
+  }
 };
