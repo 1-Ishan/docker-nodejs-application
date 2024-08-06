@@ -1,20 +1,11 @@
-FROM node:22-alpine AS builder
-
+FROM node:14 as builder
 WORKDIR /usr/src/app
-
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
-
 COPY . .
-
 RUN npm run build
 
 FROM nginx:alpine
-
-COPY --from=builder /usr/src/app/dist /usr/src/app
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
