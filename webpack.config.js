@@ -1,24 +1,23 @@
-const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  entry: './src/index.js', // Entry point of your application
-  output: {
-    filename: 'bundle.js', // Output file name
-    path: path.resolve(__dirname, 'dist'), // Output directory
-  },
-  mode: 'production',
-  module: {
-    rules: [
-      {
-        test: /\.js$/, // Apply this rule to .js files
-        exclude: /node_modules/, // Exclude node_modules directory
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'], // Use the preset-env Babel preset
-          },
-        },
-      },
-    ],
-  },
+    // your existing webpack configuration
+    resolve: {
+        fallback: {
+            "http": require.resolve("stream-http"),
+            "zlib": require.resolve("browserify-zlib"),
+            "querystring": require.resolve("querystring-es3"),
+            "path": require.resolve("path-browserify"),
+            "crypto": require.resolve("crypto-browserify"),
+            "fs": false,
+            "stream": require.resolve("stream-browserify"),
+            "net": false,
+        }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+            Buffer: ['buffer', 'Buffer'],
+        }),
+    ]
 };
